@@ -11,6 +11,7 @@
   "dependencies": {
     "@nextui-org/react": "^2.4.6",
     "axios": "^1.7.3",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.3.24",
     "next": "14.2.5",
     "next-intl": "^3.17.2",
@@ -18,9 +19,12 @@
     "react": "^18",
     "react-dom": "^18",
     "sonner": "^1.5.0",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "tailwind-merge": "^2.4.0",
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
+    "@iconify/react": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
