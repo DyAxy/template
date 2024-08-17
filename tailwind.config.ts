@@ -2,17 +2,35 @@ import type { Config } from "tailwindcss";
 import { nextui } from "@nextui-org/react";
 import cfg from "./config";
 
-const color2dark = (color: string) => {
-  const amount = -50
-  const bigint = parseInt(color.slice(1), 16);
+const hex2rgb = (hex: string) => {
+  const bigint = parseInt(hex.slice(1), 16);
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
-  const newR = Math.max(Math.min(r + amount, 255), 0);
-  const newG = Math.max(Math.min(g + amount, 255), 0);
-  const newB = Math.max(Math.min(b + amount, 255), 0);
+  return { r, g, b };
+}
 
-  return `#${((1 << 24) + (newR << 16) + (newG << 8) + newB).toString(16).slice(1)}`
+const rgb2hex = (r: number, g: number, b: number) => {
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
+const adjustColorBrightness = (color: string, amount: number) => {
+  const { r, g, b } = hex2rgb(color);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+  if (brightness < 50 || brightness > 200) {
+    // 颜色过于黑暗或过于明亮，返回反色
+    return rgb2hex(255 - r, 255 - g, 255 - b);
+  } else {
+    const adjustedR = Math.min(255, Math.max(0, r + amount));
+    const adjustedG = Math.min(255, Math.max(0, g + amount));
+    const adjustedB = Math.min(255, Math.max(0, b + amount));
+    return rgb2hex(adjustedR, adjustedG, adjustedB);
+  }
+}
+
+const color2dark = (color: string) => {
+  return adjustColorBrightness(color, -30); // Adjust the amount as needed
 }
 
 const config: Config = {
@@ -22,22 +40,14 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-    },
-  },
+  theme: {},
   darkMode: "class",
   plugins: [nextui({
     themes: {
       light: {
         colors: {
           primary: {
-            DEFAULT: cfg.color != '' ? cfg.color : '#006FEE',
+            DEFAULT: cfg.appColor != '' ? cfg.appColor : '#006FEE',
           },
         }
       },
@@ -45,7 +55,7 @@ const config: Config = {
         colors: {
           background: '#2b2b2b',
           primary: {
-            DEFAULT: cfg.color != '' ? color2dark(cfg.color) : '#006FEE'
+            DEFAULT: cfg.appColor != '' ? color2dark(cfg.appColor) : '#006FEE'
           },
         }
       }

@@ -1,8 +1,9 @@
 const cfg = {
-    apiUrl: 'https://v2b.haruka.cloud/',
-    title: 'V2Board',
-    wallpaper: 'https://img.loliapi.com/i/pc/img318.webp',
-    color: '#DB5A6B'
+    appName: process.env.NEXT_PUBLIC_APP_NAME || 'V2Board',
+    appColor: process.env.NEXT_PUBLIC_APP_COLOR ? '#' + process.env.NEXT_PUBLIC_APP_COLOR : '#006FEE',
+    appWallpaper: process.env.NEXT_PUBLIC_APP_WALLPAPER || 'https://img.loliapi.com/i/pc/img318.webp',
+
+    crispWebsiteId: process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID || '',
     // 添加其他配置
 };
 

@@ -2,5 +2,10 @@
     "Components": {
         "I18NSwitch": "Switch Language",
         "Loading": "Loading..."
+    },
+    "NotFound": {
+        "title": "Page Not Found",
+        "desc": "Sorry, the page you visited does not exist.",
+        "back": "Back to Home"
     }
 }

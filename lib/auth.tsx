@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const getWebConfig = async () => {
             try {
-                const response = await axios.get('/api?scheme=guest/comm/config')
+                const response = await axios.get('/api/guest/comm/config')
                 if (response.status === 200) {
                     setWebConfig(response.data.data)
                 }
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             axios.defaults.headers.common['Authorization'] = token;
             const checkLogin = async () => {
                 try {
-                    const response = await axios.get('/api?scheme=user/checkLogin')
+                    const response = await axios.get('/api/user/checkLogin')
                     if (response.status === 200 && response.data.success) {
                         setIsLoggedIn(true);
                     } else {
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const response = await axios.post("/api?scheme=passport/auth/login", {
+            const response = await axios.post("/api/passport/auth/login", {
                 "email": email,
                 "password": password
             })
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         recaptcha_data: string
     ) => {
         try {
-            const response = await axios.post("/api?scheme=passport/auth/register", {
+            const response = await axios.post("/api/passport/auth/register", {
                 email,
                 password,
                 email_code,
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const reset = async (email: string, password: string, email_code: string) => {
         try {
-            const response = await axios.post("/api?scheme=passport/auth/forget", {
+            const response = await axios.post("/api/passport/auth/forget", {
                 email: email,
                 password: password,
                 email_code: email_code
@@ -134,7 +134,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const changePass = async (oldPass: string, newPass: string) => {
         try {
-            const response = await axios.post("/api?scheme=user/changePassword", {
+            const response = await axios.post("/api/user/changePassword", {
                 old_password: oldPass,
                 new_password: newPass,
             })
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const sendEmailVerify = async (email: string, recaptcha_data: string | null) => {
         try {
-            const response = await axios.post("/api?scheme=passport/comm/sendEmailVerify", {
+            const response = await axios.post("/api/passport/comm/sendEmailVerify", {
                 email, recaptcha_data
             })
             return { success: true, data: response.data.data }

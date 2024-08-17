@@ -2,5 +2,10 @@
     "Components": {
         "I18NSwitch": "Chuyển Ngôn Ngữ",
         "Loading": "Đang tải..."
+    },
+    "NotFound": {
+        "title": "Không tìm thấy trang",
+        "desc": "Xin lỗi, trang bạn truy cập không tồn tại.",
+        "back": "Quay lại trang chủ"
     }
 }

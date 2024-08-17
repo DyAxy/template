@@ -1,11 +1,17 @@
 'use client'
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { NextUIProvider } from '@nextui-org/react'
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { Toaster } from 'sonner';
-import { AuthProvider } from "@/lib/auth";
+import { Crisp } from "crisp-sdk-web";
+import { AuthProvider, useAuth } from "@/lib/auth";
+
+import config from "@/config";
+import { getLocale } from 'next-intl/server';
+import { getUserLocale } from '@/lib/i18n';
+import { useLocale } from 'next-intl';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -22,11 +28,24 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <AuthProvider>
                     <ThemeProvider />
                     <ToastProvider />
+                    <CrispProvider />
                     {children}
                 </AuthProvider>
             </NextThemesProvider>
         </NextUIProvider>
     )
+}
+
+const CrispProvider = () => {
+    const locale = useLocale()
+    useEffect(() => {
+        if (config.crispWebsiteId) {
+            Crisp.configure(config.crispWebsiteId, {
+                locale: locale ?? '',
+            })
+        }
+    }, [locale]);
+    return null;
 }
 
 const ThemeProvider = () => {
