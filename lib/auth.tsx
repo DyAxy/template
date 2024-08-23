@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 import axios, { AxiosError } from 'axios';
 
 interface AuthContextType {
@@ -7,10 +7,10 @@ interface AuthContextType {
     isAuthChecked: boolean;
     login: (email: string, password: string) => Promise<any>;
     logout: () => void;
-    register: (email: string, password: string, email_code: string, invite_code: string, recaptcha_data: string) => Promise<any>
+    register: (email: string, password: string, email_code: string, invite_code: string, recaptcha_data?: string) => Promise<any>
     reset: (email: string, password: string, email_code: string) => Promise<any>
     changePass: (oldPass: string, newPass: string) => Promise<any>
-    sendEmailVerify: (email: string, code: string | null) => Promise<any>
+    sendEmailVerify: (email: string, code?: string | null) => Promise<any>
     webConfig: WebConfig | undefined
 }
 
@@ -23,36 +23,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const [webConfig, setWebConfig] = useState<WebConfig>()
 
-    useEffect(() => {
-        const getWebConfig = async () => {
-            try {
-                const response = await axios.get('/api/guest/comm/config')
-                if (response.status === 200) {
-                    setWebConfig(response.data.data)
-                }
-            } catch (error) {
-                console.log(error)
+    const getWebConfig = async () => {
+        try {
+            const response = await axios.get('/api/guest/comm/config')
+            if (response.status === 200) {
+                setWebConfig(response.data.data)
             }
+        } catch (error) {
+            console.log(error)
         }
+    }
+
+    const checkLogin = async () => {
+        try {
+            const response = await axios.get('/api/user/checkLogin')
+            if (response.status === 200 && response.data.success) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+        } catch (error) {
+            setIsLoggedIn(false);
+        } finally {
+            setIsAuthChecked(true);
+        }
+    };
+
+    useEffect(() => {
         getWebConfig()
 
         const token = localStorage.getItem('authToken');
         if (token) {
             axios.defaults.headers.common['Authorization'] = token;
-            const checkLogin = async () => {
-                try {
-                    const response = await axios.get('/api/user/checkLogin')
-                    if (response.status === 200 && response.data.success) {
-                        setIsLoggedIn(true);
-                    } else {
-                        setIsLoggedIn(false);
-                    }
-                } catch (error) {
-                    setIsLoggedIn(false);
-                } finally {
-                    setIsAuthChecked(true);
-                }
-            };
             checkLogin();
         } else {
             setIsAuthChecked(true);
@@ -93,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         password: string,
         email_code: string,
         invite_code: string,
-        recaptcha_data: string
+        recaptcha_data?: string
     ) => {
         try {
             const response = await axios.post("/api/passport/auth/register", {
@@ -149,7 +151,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    const sendEmailVerify = async (email: string, recaptcha_data: string | null) => {
+    const sendEmailVerify = async (email: string, recaptcha_data?: string | null) => {
         try {
             const response = await axios.post("/api/passport/comm/sendEmailVerify", {
                 email, recaptcha_data

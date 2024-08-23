@@ -1,11 +1,48 @@
 {
     "Components": {
         "I18NSwitch": "切换显示的语言",
-        "Loading": "加载中..."
+        "Loading": "加载中...",
+        "modeLight": "切换到浅色模式",
+        "modeDark": "切换到深色模式"
     },
     "NotFound": {
         "title": "页面未找到",
         "desc": "抱歉，您访问的页面不存在。",
         "back": "返回首页"
+    },
+    "Users": {
+        "bLogin": "登录账号",
+        "bRegister": "注册账号",
+        "bVerify": "发送",
+        "bForget": "重置密码",
+        "loginSuccess": "登录成功，正在跳转",
+        "registerSuccess": "注册成功，正在登录",
+        "resetSuccess": "重置成功，正在登录",
+        "forgotPassword": "忘记密码了？",
+        "signUp": "创建账号",
+        "signUpDesc": "还没有账号？",
+        "login": "登录",
+        "loginDesc": "已经有账号？",
+        "loginDesc2": "想起密码了？",
+        "email": "邮箱",
+        "emailDesc": "请输入邮箱",
+        "emailInvalid": "邮箱格式不正确",
+        "emailEmpty": "邮箱不能为空",
+        "verifyCode": "验证码",
+        "verifyCodeDesc": "请输入验证码",
+        "verifyCodeInvalid": "验证码不能为空",
+        "verifyCodeSent": "验证码已发送",
+        "password": "密码",
+        "passwordDesc": "请输入密码",
+        "passwordInvalid": "密码长度至少 8 位",
+        "password1": "确认密码",
+        "password1Desc": "请再次输入密码",
+        "password1Invalid": "两次输入的密码不一致",
+        "inviteCode": "邀请码",
+        "inviteCodeDesc": "请输入邀请码",
+        "inviteCodeOptional": "（可选）",
+        "inviteCodeInvalid": "邀请码不能为空",
+        "or": "或",
+        "tos": "我已阅读并同意 <toslink>服务条款</toslink>"
     }
 }

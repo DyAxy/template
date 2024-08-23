@@ -1,17 +1,17 @@
 'use client'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect} from 'react';
+import { useRouter } from 'next-nprogress-bar';
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { NextUIProvider } from '@nextui-org/react'
 import { Toaster } from 'sonner';
 import { Crisp } from "crisp-sdk-web";
-import { AuthProvider, useAuth } from "@/lib/auth";
+import { AuthProvider } from "@/lib/auth";
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 import config from "@/config";
-import { getLocale } from 'next-intl/server';
-import { getUserLocale } from '@/lib/i18n';
 import { useLocale } from 'next-intl';
+import cfg from '@/config';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -29,6 +29,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     <ThemeProvider />
                     <ToastProvider />
                     <CrispProvider />
+                    <ProgressBar
+                        height="4px"
+                        options={{ showSpinner: false }}
+                        shallowRouting
+                        color={cfg.appColor}
+                    />
                     {children}
                 </AuthProvider>
             </NextThemesProvider>
@@ -62,6 +68,6 @@ const ThemeProvider = () => {
 const ToastProvider = () => {
     const { theme } = useTheme();
     return (
-        <Toaster position="top-center" theme={theme as "light" | "dark" | "system"} />
+        <Toaster richColors position="top-center" theme={theme as "light" | "dark" | "system"} />
     );
 }

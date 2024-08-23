@@ -107,7 +107,6 @@ const exec = async (req: Request, context: { params: Params }) => {
             }
         );
     } catch (e) {
-        console.error(e)
         if (axios.isAxiosError(e)) {
             const data = (e as AxiosError<ErrorResponse>).response?.data
             return new Response(
