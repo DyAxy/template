@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useRouter } from 'next-nprogress-bar';
 import axios, { AxiosError } from 'axios';
+import { Crisp } from 'crisp-sdk-web';
+import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -12,6 +13,9 @@ interface AuthContextType {
     changePass: (oldPass: string, newPass: string) => Promise<any>
     sendEmailVerify: (email: string, code?: string | null) => Promise<any>
     webConfig: WebConfig | undefined
+    appConfig: AppConfig | undefined
+    userInfo: UserInfo | undefined
+    getUserInfo: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,6 +26,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
 
     const [webConfig, setWebConfig] = useState<WebConfig>()
+    const [appConfig, setAppConfig] = useState<AppConfig>()
+    const [userInfo, setUserInfo] = useState<UserInfo>()
 
     const getWebConfig = async () => {
         try {
@@ -34,11 +40,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getAppConfig = async () => {
+        try {
+            const response = await axios.get('/api/user/comm/config')
+            if (response.status === 200) {
+                setAppConfig(response.data.data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getUserInfo = async () => {
+        try {
+            const response = await axios.get('/api/user/info')
+            if (response.status === 200) {
+                setUserInfo(response.data.data)
+                Crisp.user.setEmail(response.data.data.email)
+                Crisp.user.setAvatar(response.data.data.avatar_url)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const checkLogin = async () => {
         try {
             const response = await axios.get('/api/user/checkLogin')
             if (response.status === 200 && response.data.success) {
                 setIsLoggedIn(true);
+                getUserInfo()
+                getAppConfig()
             } else {
                 setIsLoggedIn(false);
             }
@@ -71,6 +103,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem('authToken', token);
             axios.defaults.headers.common['Authorization'] = token
             setIsLoggedIn(true);
+            await getUserInfo()
+            await getAppConfig()
             router.push('/dashboard');
             return { success: true, data: response.data.data }
         } catch (e) {
@@ -179,7 +213,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 reset,
                 changePass,
                 sendEmailVerify,
-                webConfig
+                webConfig,
+                userInfo,
+                getUserInfo,
+                appConfig
             }}>
             {children}
         </AuthContext.Provider>

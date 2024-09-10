@@ -1,17 +1,16 @@
 'use client'
 
-import { useEffect} from 'react';
-import { useRouter } from 'next-nprogress-bar';
+import { useEffect } from 'react';
+import { useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
+
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { NextUIProvider } from '@nextui-org/react'
 import { Toaster } from 'sonner';
 import { Crisp } from "crisp-sdk-web";
 import { AuthProvider } from "@/lib/auth";
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 import config from "@/config";
-import { useLocale } from 'next-intl';
-import cfg from '@/config';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -28,15 +27,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <AuthProvider>
                     <ThemeProvider />
                     <ToastProvider />
-                    <CrispProvider />
-                    <ProgressBar
-                        height="4px"
-                        options={{ showSpinner: false }}
-                        shallowRouting
-                        color={cfg.appColor}
-                    />
                     {children}
                 </AuthProvider>
+                <CrispProvider />
             </NextThemesProvider>
         </NextUIProvider>
     )

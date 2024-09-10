@@ -6,12 +6,6 @@ const request = axios.create({
         'Content-Type': 'application/json',
     },
 });
-export const fetcher = (url: string) => axios.get(`/api?scheme=${url}`).then(res => res.data.data)
-export const fetchData = async (url: string) => {
-    try {
-        return await axios.get(`/api?scheme=${url}`)
-    } catch (e) {
-        throw e
-    }
-}
+export const fetcher = (url: string) => axios.get(`${url}`).then(res => res.data)
+
 export default request;

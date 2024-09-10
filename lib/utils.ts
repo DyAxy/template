@@ -1,3 +1,6 @@
+import cfg from "@/config";
+import { encode } from 'js-base64';
+
 export const hex2rgb = (hex: string) => {
     const bigint = parseInt(hex.slice(1), 16);
     const r = (bigint >> 16) & 255;
@@ -27,4 +30,22 @@ export const adjustColorBrightness = (color: string, amount: number) => {
 
 export const color2dark = (color: string) => {
     return adjustColorBrightness(color, -30); // Adjust the amount as needed
+}
+
+export const app2scheme = (appName: string, subUrl: string) => {
+    switch (appName) {
+        case 'clash':
+            return `clash://install-config?url=${encodeURIComponent(subUrl)}&name=${cfg.appName}`
+        case 'surge':
+            return `surge:///install-config?url=${encodeURIComponent(subUrl)}&name=${cfg.appName}`
+        case 'loon':
+            return `loon://import?sub=${encodeURIComponent(subUrl)}&name=${cfg.appName}`
+        case 'quanx':
+            return `quantumult-x:///add-resource?remote-resource=${encodeURI(JSON.stringify({ server_remote: [`${subUrl}, tag=${cfg.appName}`] }))}`
+        case 'shadowrocket':
+            return `shadowrocket://add/sub://${encode(subUrl + '&flag=shadowrocket')}?remark=${cfg.appName}`
+        case 'sing-box':
+            return `sing-box://import-remote-profile?url=${encodeURIComponent(subUrl)}#${cfg.appName}`
+    }
+    return ''
 }
